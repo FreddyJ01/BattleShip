@@ -808,7 +808,6 @@
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/scopedcss/bundle/BlazorApp1.styles.css
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/blazor.build.boot-extension.json
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/blazor.boot.json
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/fwzn8fvuqu-81sotqnb8s.gz
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/dw35ekkt6n-md9yvkcqlf.gz
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/m39es3fsv9-gf26ou9jj9.gz
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/mb77m3nvgo-v3fd2n5hlr.gz
@@ -1024,11 +1023,12 @@
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/refint/BlazorApp1.dll
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/BlazorApp1.pdb
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/ref/BlazorApp1.dll
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.9ieivyr5dd.pdb
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.qjhl4sdbkb.wasm
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.9ieivyr5dd.pdb.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.qjhl4sdbkb.wasm.gz
 /Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/ywbieikc3c-qqhe4yqaea.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/rx7sjm95zc-qjhl4sdbkb.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/kpn7vtgf7q-9ieivyr5dd.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/5jzqasczcu-xofe4nl66c.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.7nq3unmabl.pdb
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.j9lu1476h4.wasm
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.7nq3unmabl.pdb.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.j9lu1476h4.wasm.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/fwzn8fvuqu-inq16f0xti.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/rx7sjm95zc-j9lu1476h4.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/kpn7vtgf7q-7nq3unmabl.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/5jzqasczcu-0ljx4c0ruz.gz

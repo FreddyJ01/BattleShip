@@ -86,3 +86,18 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+td {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+}
+.hit {
+    background-color: red;
+}
+.miss {
+    background-color: lightblue;
+}

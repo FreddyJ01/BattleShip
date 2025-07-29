@@ -24,10 +24,10 @@ namespace BlazorApp1.obj
             totalShips++;
         }
 
-        public void PlaceShip(string location)
-        {
-            OnClick(string(location));
+        // public void PlaceShip(string location)
+        // {
+        //     OnClick(string(location));
             
-        }
+        // }
     }
 }
