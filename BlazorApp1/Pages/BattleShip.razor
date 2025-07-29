@@ -1,0 +1,24 @@
+@page "/battleship"
+
+<h3>Battleship Game</h3>
+
+<table>
+    @for (int row = 0; row < 10; row++)
+    {
+        <tr>
+            @for (int col = 0; col < 10; col++) 
+            {
+                <td @onclick="() => OnCellClick(row, col)">
+
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+@code {
+    void OnCellClick(int row, int col) 
+    {
+        
+    }
+}
