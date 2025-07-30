@@ -40,6 +40,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/Pages/ShipPlacement.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hpcFBsYWNlbWVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

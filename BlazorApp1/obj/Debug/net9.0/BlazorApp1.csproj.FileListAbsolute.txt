@@ -2058,10 +2058,10 @@ C:/BattleShip/BattleShip/blazorapp1/bin/Debug/net9.0/wwwroot/_framework/BlazorAp
 C:/BattleShip/BattleShip/blazorapp1/obj/Debug/net9.0/compressed/rx7sjm95zc-9zl4zm59t7.gz
 C:/BattleShip/BattleShip/blazorapp1/obj/Debug/net9.0/compressed/kpn7vtgf7q-gjj1lahvxl.gz
 C:/BattleShip/BattleShip/blazorapp1/obj/Debug/net9.0/compressed/5jzqasczcu-2gcp2ais25.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.mln9uogwj0.pdb
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.as0fqzy0pi.wasm
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.mln9uogwj0.pdb.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.as0fqzy0pi.wasm.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/rx7sjm95zc-as0fqzy0pi.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/kpn7vtgf7q-mln9uogwj0.gz
-/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/5jzqasczcu-5x1hde779i.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.t1dhn4akbt.pdb
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.2nre4v633u.wasm
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.t1dhn4akbt.pdb.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/bin/Debug/net9.0/wwwroot/_framework/BlazorApp1.2nre4v633u.wasm.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/rx7sjm95zc-2nre4v633u.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/kpn7vtgf7q-t1dhn4akbt.gz
+/Users/freddy/Desktop/PARA/1Projects/Code/BattleShip/BlazorApp1/obj/Debug/net9.0/compressed/5jzqasczcu-b1o1sgcf2p.gz
