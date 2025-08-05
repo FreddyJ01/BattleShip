@@ -3083,10 +3083,10 @@ C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\BlazorApp1.dll
 C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\refint\BlazorApp1.dll
 C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\BlazorApp1.pdb
 C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\ref\BlazorApp1.dll
-C:\BattleShip\BattleShip\blazorApp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.pujcbs7hkz.wasm
-C:\BattleShip\BattleShip\blazorApp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.1ilz3vfpga.pdb
-C:\BattleShip\BattleShip\blazorApp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.pujcbs7hkz.wasm.gz
-C:\BattleShip\BattleShip\blazorApp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.1ilz3vfpga.pdb.gz
-C:\BattleShip\BattleShip\blazorApp1\obj\Debug\net9.0\compressed\rx7sjm95zc-pujcbs7hkz.gz
-C:\BattleShip\BattleShip\blazorApp1\obj\Debug\net9.0\compressed\kpn7vtgf7q-1ilz3vfpga.gz
-C:\BattleShip\BattleShip\blazorApp1\obj\Debug\net9.0\compressed\5jzqasczcu-xabcm7w2ga.gz
+C:\BattleShip\BattleShip\blazorapp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.mhjnjrkvt4.wasm
+C:\BattleShip\BattleShip\blazorapp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.c8e4vp129m.pdb
+C:\BattleShip\BattleShip\blazorapp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.mhjnjrkvt4.wasm.gz
+C:\BattleShip\BattleShip\blazorapp1\bin\Debug\net9.0\wwwroot\_framework\BlazorApp1.c8e4vp129m.pdb.gz
+C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\compressed\rx7sjm95zc-mhjnjrkvt4.gz
+C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\compressed\kpn7vtgf7q-c8e4vp129m.gz
+C:\BattleShip\BattleShip\blazorapp1\obj\Debug\net9.0\compressed\5jzqasczcu-oqk0w8t721.gz
