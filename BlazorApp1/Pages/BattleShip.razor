@@ -1,38 +1,15 @@
 @page "/battleship"
 @using BlazorApp1.Models
 
-<h3>Battleship Game</h3>
+<h3>Battle Phase</h3>
 
-<!-- Ship Placement Controls -->
-<div class="ship-placement-controls">
-    <h4>Place Your Ships</h4>
-    <div class="ship-selector">
-        @foreach (var ship in shipManager.Ships)
-        {
-            <button class="ship-btn @(shipManager.SelectedShip == ship ? "selected" : "")"
-                    @onclick="() => SelectShip(ship)">
-                @ship.Type (@ship.Length)
-                @if (ship.IsPlaced) { <span class="placed">✓</span> }
-            </button>
-        }
-    </div>
-    
-    @if (shipManager.SelectedShip != null)
-    {
-        <div class="ship-controls">
-            <p>Selected: @shipManager.SelectedShip.Type</p>
-            <button @onclick="RotateSelectedShip">Rotate Ship</button>
-            @if (shipManager.SelectedShip.IsPlaced)
-            {
-                <button @onclick="RemoveSelectedShip">Remove Ship</button>
-            }
-        </div>
-    }
+<div class="battle-status">
+    <p class="status-text">🎯 Select enemy grid positions to attack!</p>
 </div>
 
 <div class="boards-container">
     <div class="board-section">
-        <h3>Your Board</h3>
+        <h3>Your Fleet</h3>
         <table>
             @for (int row = 0; row < 10; row++)
             {
@@ -41,8 +18,7 @@
                     {
                         int currentRow = row;
                         int currentCol = col;
-                        <td class="@GetPlayerCellClass(currentRow, currentCol)" 
-                            @onclick="() => OnPlayerCellClick(currentRow, currentCol)">
+                        <td class="@GetPlayerCellClass(currentRow, currentCol)">
                             @DisplayPlayerCellContent(currentRow, currentCol)
                         </td>
                     }
@@ -52,7 +28,7 @@
     </div>
     
     <div class="board-section">
-        <h3>Opponent's Board</h3>
+        <h3>Enemy Waters</h3>
         <table>
             @for (int row = 0; row < 10; row++)
             {
@@ -72,71 +48,29 @@
     </div>
 </div>
 
+@if (CheckVictory())
+{
+    <div class="victory-message">
+        <h2>🎉 Victory! You've sunk all enemy ships! 🎉</h2>
+        <button class="btn btn-primary" @onclick="RestartGame">Play Again</button>
+    </div>
+}
+
 <style>
-    .ship-placement-controls {
-        margin-bottom: 20px;
+    .battle-status {
         text-align: center;
-    }
-
-    .ship-selector {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin: 10px 0;
-        flex-wrap: wrap;
-    }
-
-    .ship-btn {
-        padding: 10px 15px;
-        border: 2px solid #007bff;
-        background-color: white;
-        color: #007bff;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .ship-btn.selected {
-        background-color: #007bff;
+        margin: 20px 0;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .ship-btn:hover {
-        background-color: #0056b3;
-        color: white;
-    }
-
-    .placed {
-        color: #28a745;
-        font-weight: bold;
-    }
-
-    .ship-controls {
-        margin: 15px 0;
-    }
-
-    .ship-controls button {
-        margin: 0 5px;
-        padding: 8px 16px;
-        border: 1px solid #ccc;
-        background-color: #f8f9fa;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .ship-controls button:hover {
-        background-color: #e2e6ea;
-    }
-
-    /* Add preview styling for ship placement */
-    .ship-preview {
-        background-color: #007bff !important;
-        opacity: 0.7;
-    }
-
-    .invalid-placement {
-        background-color: #dc3545 !important;
-        opacity: 0.7;
+    .status-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
     }
 
     .boards-container {
@@ -144,16 +78,30 @@
         justify-content: center;
         gap: 40px;
         margin-top: 20px;
+        flex-wrap: wrap;
     }
+
     .board-section {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
+    .board-section h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
     table {
         border-collapse: collapse;
         margin: 0 auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        overflow: hidden;
     }
+
     td {
         width: 40px;
         height: 40px;
@@ -164,27 +112,82 @@
         font-weight: bold;
         font-size: 18px;
         user-select: none;
+        transition: all 0.2s ease;
     }
+
     .empty {
         background-color: #87CEEB;
     }
+
     .empty:hover {
         background-color: #B0E0E6;
+        transform: scale(1.05);
     }
+
     .ship {
         background-color: #4169E1;
         color: white;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+
     .hit {
-        background-color: #DC143C; /* red */
+        background-color: #DC143C;
         color: white;
+        position: relative;
     }
+
+    .hit::after {
+        content: "💥";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+    }
+
     .miss {
-        background-color: #696969; /* grey */
+        background-color: #696969;
         color: white;
     }
+
     .hit, .miss {
         cursor: not-allowed;
+    }
+
+    .victory-message {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .victory-message h2 {
+        margin: 0 0 15px 0;
+        font-size: 2rem;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
     }
 </style>
 
@@ -192,89 +195,99 @@
     // 0 = empty, 1 = ship, 2 = hit, 3 = miss
     int[,] opponentGrid = new int[10, 10];
     ShipManager shipManager = new ShipManager();
+    private int totalOpponentShips = 0;
+    private int hitOpponentShips = 0;
 
     protected override void OnInitialized()
     {
+        // Place player ships automatically for now (in a real implementation, this would come from ship placement page)
+        PlacePlayerShipsAutomatically();
         PlaceOpponentShips();
+    }
+
+    void PlacePlayerShipsAutomatically()
+    {
+        // Auto-place player ships for demonstration
+        shipManager.PlaceShip(shipManager.Ships[0], 0, 0, ShipOrientation.Horizontal); // Carrier
+        shipManager.PlaceShip(shipManager.Ships[1], 2, 1, ShipOrientation.Vertical);   // Destroyer
+        shipManager.PlaceShip(shipManager.Ships[2], 5, 5, ShipOrientation.Horizontal); // Corvette
+        shipManager.PlaceShip(shipManager.Ships[3], 8, 8, ShipOrientation.Vertical);   // Submarine
     }
 
     void PlaceOpponentShips()
     {
         // Place opponent ships randomly (simplified)
+        var shipPositions = new List<(int row, int col)>();
+        
+        // Carrier (3 cells)
         for (int col = 3; col <= 5; col++)
+        {
             opponentGrid[2, col] = 1;
+            shipPositions.Add((2, col));
+        }
+        
+        // Destroyer (3 cells)
         for (int row = 1; row <= 3; row++)
+        {
             opponentGrid[row, 7] = 1;
+            shipPositions.Add((row, 7));
+        }
+        
+        // Corvette (3 cells)
         for (int col = 1; col <= 3; col++)
+        {
             opponentGrid[5, col] = 1;
+            shipPositions.Add((5, col));
+        }
+        
+        // Submarine (2 cells)
         opponentGrid[8, 6] = 1;
         opponentGrid[8, 7] = 1;
+        shipPositions.Add((8, 6));
+        shipPositions.Add((8, 7));
+        
+        // Single ship (1 cell)
         opponentGrid[0, 9] = 1;
-    }
+        shipPositions.Add((0, 9));
 
-    void SelectShip(Ship ship)
-    {
-        shipManager.SelectedShip = ship;
-        StateHasChanged();
-    }
-
-    void OnPlayerCellClick(int row, int col)
-    {
-        if (shipManager.SelectedShip == null) return;
-
-        // Try to place the selected ship
-        bool placed = shipManager.PlaceShip(
-            shipManager.SelectedShip, 
-            row, 
-            col, 
-            shipManager.SelectedShip.Orientation);
-
-        if (placed)
-        {
-            // Move to next unplaced ship
-            shipManager.SelectedShip = shipManager.Ships
-                .FirstOrDefault(s => !s.IsPlaced);
-        }
-
-        StateHasChanged();
-    }
-
-    void RotateSelectedShip()
-    {
-        if (shipManager.SelectedShip != null)
-        {
-            shipManager.RotateShip(shipManager.SelectedShip);
-            StateHasChanged();
-        }
-    }
-
-    void RemoveSelectedShip()
-    {
-        if (shipManager.SelectedShip != null)
-        {
-            shipManager.RemoveShipFromGrid(shipManager.SelectedShip);
-            StateHasChanged();
-        }
+        totalOpponentShips = shipPositions.Count;
     }
 
     void OnOpponentCellClick(int row, int col)
     {
-        // Only allow attacking if all ships are placed
-        if (shipManager.Ships.Any(s => !s.IsPlaced))
-        {
-            return; // All ships must be placed first
-        }
-
         if (row < 0 || row >= 10 || col < 0 || col >= 10)
             return;
         if (opponentGrid[row, col] == 2 || opponentGrid[row, col] == 3)
             return;
 
         if (opponentGrid[row, col] == 1)
+        {
             opponentGrid[row, col] = 2; // hit
+            hitOpponentShips++;
+        }
         else
+        {
             opponentGrid[row, col] = 3; // miss
+        }
 
+        StateHasChanged();
+    }
+
+    bool CheckVictory()
+    {
+        return hitOpponentShips >= totalOpponentShips;
+    }
+
+    void RestartGame()
+    {
+        // Reset grids
+        opponentGrid = new int[10, 10];
+        shipManager = new ShipManager();
+        hitOpponentShips = 0;
+        totalOpponentShips = 0;
+        
+        // Reinitialize the game
+        OnInitialized();
         StateHasChanged();
     }
 
