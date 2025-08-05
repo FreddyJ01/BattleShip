@@ -1,8 +1,144 @@
 @page "/battleship"
+@using BlazorApp1.Models
 
 <h3>Battleship Game</h3>
 
+<!-- Ship Placement Controls -->
+<div class="ship-placement-controls">
+    <h4>Place Your Ships</h4>
+    <div class="ship-selector">
+        @foreach (var ship in shipManager.Ships)
+        {
+            <button class="ship-btn @(shipManager.SelectedShip == ship ? "selected" : "")"
+                    @onclick="() => SelectShip(ship)">
+                @ship.Type (@ship.Length)
+                @if (ship.IsPlaced) { <span class="placed">✓</span> }
+            </button>
+        }
+    </div>
+    
+    @if (shipManager.SelectedShip != null)
+    {
+        <div class="ship-controls">
+            <p>Selected: @shipManager.SelectedShip.Type</p>
+            <button @onclick="RotateSelectedShip">Rotate Ship</button>
+            @if (shipManager.SelectedShip.IsPlaced)
+            {
+                <button @onclick="RemoveSelectedShip">Remove Ship</button>
+            }
+        </div>
+    }
+</div>
+
+<div class="boards-container">
+    <div class="board-section">
+        <h3>Your Board</h3>
+        <table>
+            @for (int row = 0; row < 10; row++)
+            {
+                <tr>
+                    @for (int col = 0; col < 10; col++)
+                    {
+                        int currentRow = row;
+                        int currentCol = col;
+                        <td class="@GetPlayerCellClass(currentRow, currentCol)" 
+                            @onclick="() => OnPlayerCellClick(currentRow, currentCol)">
+                            @DisplayPlayerCellContent(currentRow, currentCol)
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    
+    <div class="board-section">
+        <h3>Opponent's Board</h3>
+        <table>
+            @for (int row = 0; row < 10; row++)
+            {
+                <tr>
+                    @for (int col = 0; col < 10; col++)
+                    {
+                        int currentRow = row;
+                        int currentCol = col;
+                        <td class="@GetOpponentCellClass(currentRow, currentCol)" 
+                            @onclick="() => OnOpponentCellClick(currentRow, currentCol)">
+                            @DisplayCellContent(opponentGrid, currentRow, currentCol)
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
 <style>
+    .ship-placement-controls {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .ship-selector {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 10px 0;
+        flex-wrap: wrap;
+    }
+
+    .ship-btn {
+        padding: 10px 15px;
+        border: 2px solid #007bff;
+        background-color: white;
+        color: #007bff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .ship-btn.selected {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .ship-btn:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .placed {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .ship-controls {
+        margin: 15px 0;
+    }
+
+    .ship-controls button {
+        margin: 0 5px;
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .ship-controls button:hover {
+        background-color: #e2e6ea;
+    }
+
+    /* Add preview styling for ship placement */
+    .ship-preview {
+        background-color: #007bff !important;
+        opacity: 0.7;
+    }
+
+    .invalid-placement {
+        background-color: #dc3545 !important;
+        opacity: 0.7;
+    }
+
     .boards-container {
         display: flex;
         justify-content: center;
@@ -52,94 +188,103 @@
     }
 </style>
 
-<div class="boards-container">
-    <div class="board-section">
-        <h3>Your Board</h3>
-        <table>
-            @for (int row = 0; row < 10; row++)
-            {
-                <tr>
-                    @for (int col = 0; col < 10; col++)
-                    {
-                        <td class="@GetPlayerCellClass(row, col)">
-                            @GetCellContent(playerGrid, row, col)
-                        </td>
-                    }
-                </tr>
-            }
-        </table>
-    </div>
-    <div class="board-section">
-        <h3>Opponent's Board</h3>
-        <table>
-            @for (int row = 0; row < 10; row++)
-            {
-                <tr>
-                    @for (int col = 0; col < 10; col++)
-                    {
-                        <td class="@GetOpponentCellClass(row, col)" @onclick="() => OnOpponentCellClick(row, col)">
-                            @GetCellContent(opponentGrid, row, col)
-                        </td>
-                    }
-                </tr>
-            }
-        </table>
-    </div>
-</div>
-
 @code {
     // 0 = empty, 1 = ship, 2 = hit, 3 = miss
-    int[,] playerGrid = new int[10, 10];
     int[,] opponentGrid = new int[10, 10];
+    ShipManager shipManager = new ShipManager();
 
     protected override void OnInitialized()
     {
-        PlaceShips(playerGrid);
-        PlaceShips(opponentGrid);
+        PlaceOpponentShips();
     }
 
-    // Places ships for demo purposes
-    void PlaceShips(int[,] grid)
+    void PlaceOpponentShips()
     {
+        // Place opponent ships randomly (simplified)
         for (int col = 3; col <= 5; col++)
-            grid[2, col] = 1;
+            opponentGrid[2, col] = 1;
         for (int row = 1; row <= 3; row++)
-            grid[row, 7] = 1;
+            opponentGrid[row, 7] = 1;
         for (int col = 1; col <= 3; col++)
-            grid[5, col] = 1;
-        grid[8, 6] = 1;
-        grid[8, 7] = 1;
-        grid[0, 9] = 1;
+            opponentGrid[5, col] = 1;
+        opponentGrid[8, 6] = 1;
+        opponentGrid[8, 7] = 1;
+        opponentGrid[0, 9] = 1;
     }
 
-    // Handles clicks on opponent's board
+    void SelectShip(Ship ship)
+    {
+        shipManager.SelectedShip = ship;
+        StateHasChanged();
+    }
+
+    void OnPlayerCellClick(int row, int col)
+    {
+        if (shipManager.SelectedShip == null) return;
+
+        // Try to place the selected ship
+        bool placed = shipManager.PlaceShip(
+            shipManager.SelectedShip, 
+            row, 
+            col, 
+            shipManager.SelectedShip.Orientation);
+
+        if (placed)
+        {
+            // Move to next unplaced ship
+            shipManager.SelectedShip = shipManager.Ships
+                .FirstOrDefault(s => !s.IsPlaced);
+        }
+
+        StateHasChanged();
+    }
+
+    void RotateSelectedShip()
+    {
+        if (shipManager.SelectedShip != null)
+        {
+            shipManager.RotateShip(shipManager.SelectedShip);
+            StateHasChanged();
+        }
+    }
+
+    void RemoveSelectedShip()
+    {
+        if (shipManager.SelectedShip != null)
+        {
+            shipManager.RemoveShipFromGrid(shipManager.SelectedShip);
+            StateHasChanged();
+        }
+    }
+
     void OnOpponentCellClick(int row, int col)
     {
-        // Only allow clicking if cell hasn't been guessed yet
+        // Only allow attacking if all ships are placed
+        if (shipManager.Ships.Any(s => !s.IsPlaced))
+        {
+            return; // All ships must be placed first
+        }
+
         if (row < 0 || row >= 10 || col < 0 || col >= 10)
             return;
         if (opponentGrid[row, col] == 2 || opponentGrid[row, col] == 3)
             return;
+
         if (opponentGrid[row, col] == 1)
             opponentGrid[row, col] = 2; // hit
-        else if (opponentGrid[row, col] == 0)
+        else
             opponentGrid[row, col] = 3; // miss
+
         StateHasChanged();
     }
 
-    // Returns CSS class for player's board (shows ships)
     string GetPlayerCellClass(int row, int col)
     {
-        return playerGrid[row, col] switch
-        {
-            1 => "ship",
-            2 => "hit",
-            3 => "miss",
-            _ => "empty"
-        };
+        if (shipManager.Grid[row, col] == 1)
+            return "ship";
+        return "empty";
     }
 
-    // Returns CSS class for opponent's board (hides ships)
     string GetOpponentCellClass(int row, int col)
     {
         return opponentGrid[row, col] switch
@@ -150,14 +295,22 @@
         };
     }
 
-    // Returns symbol for cell state
-    // "X" for hit, "O" for miss, blank otherwise
-    string GetCellContent(int[,] grid, int row, int col)
+    string DisplayPlayerCellContent(int row, int col)
+    {
+        var ship = shipManager.GetShipAtPosition(row, col);
+        if (ship != null)
+        {
+            return ship.Type[0].ToString(); // First letter of ship type
+        }
+        return "";
+    }
+
+    string DisplayCellContent(int[,] grid, int row, int col)
     {
         return grid[row, col] switch
         {
-            2 => "X",
-            3 => "O",
+            2 => "X", // hit
+            3 => "O", // miss
             _ => ""
         };
     }
