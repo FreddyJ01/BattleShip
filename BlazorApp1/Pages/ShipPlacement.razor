@@ -1,5 +1,6 @@
 @page "/ship-placement"
 @inject NavigationManager Navigation
+@inject BlazorApp1.Services.GameStateService GameState
 
 <div class="deployment-container">
     <!-- Animated background particles -->
@@ -10,8 +11,8 @@
         }
     </div>
 
-    <div class="deployment-content">
-        <h3>Deploy Your Fleet</h3>
+    <div class="deployment-content" @onclick="DeselectShip">
+        <h3 @onclick="NavigateToHome" @onclick:stopPropagation="true" style="cursor: pointer;">Deploy Your Fleet</h3>
 
         <div class="ship-placement-container">
             <!-- Ship Placement Controls -->
@@ -21,30 +22,18 @@
             @foreach (var ship in shipManager.Ships)
             {
                 <button class="ship-btn @(shipManager.SelectedShip == ship ? "selected" : "")"
-                        @onclick="() => SelectShip(ship)">
+                        @onclick="() => SelectShip(ship)" @onclick:stopPropagation="true">
                     @ship.Type (@ship.Length)
                     @if (ship.IsPlaced) { <span class="placed">✓</span> }
                 </button>
             }
         </div>
-        
-        @if (shipManager.SelectedShip != null)
-        {
-            <div class="ship-controls">
-                <p>Selected: @shipManager.SelectedShip.Type</p>
-                <button @onclick="RotateSelectedShip">Rotate Ship</button>
-                @if (shipManager.SelectedShip.IsPlaced)
-                {
-                    <button @onclick="RemoveSelectedShip">Remove Ship</button>
-                }
-            </div>
-        }
 
         @if (AllShipsPlaced())
         {
             <div class="launch-controls">
-                <button class="btn btn-primary launch-btn" @onclick="LaunchBattle">
-                    ⚔️ Launch Battle!
+                <button class="btn btn-primary launch-btn" @onclick="LaunchBattle" @onclick:stopPropagation="true" draggable="false">
+                    🔱 Launch Battle!
                 </button>
             </div>
         }
@@ -67,7 +56,7 @@
                         int currentRow = row;
                         int currentCol = col;
                         <td class="@GetPlayerCellClass(currentRow, currentCol)" 
-                            @onclick="() => OnPlayerCellClick(currentRow, currentCol)"
+                            @onclick="() => OnPlayerCellClick(currentRow, currentCol)" @onclick:stopPropagation="true"
                             @onmouseover="() => OnCellHover(currentRow, currentCol)"
                             @onmouseleave="() => OnCellLeave()">
                             @DisplayPlayerCellContent(currentRow, currentCol)
@@ -76,6 +65,43 @@
                 </tr>
             }
         </table>
+    </div>
+
+    <!-- Selected Ship Controls (Right Side) -->
+    <div class="selected-ship-section">
+        @if (shipManager.SelectedShip != null)
+        {
+            <div class="ship-controls">
+                <p>Selected: @shipManager.SelectedShip.Type</p>
+                @if (shipManager.SelectedShip.IsPlaced)
+                {
+                    <button @onclick="RemoveSelectedShip" @onclick:stopPropagation="true">Remove Ship</button>
+                }
+                else
+                {
+                    <button @onclick="RotateSelectedShip" @onclick:stopPropagation="true">
+                        @(shipManager.SelectedShip.Orientation == ShipOrientation.Horizontal ? "Horizontal" : "Vertical")
+                    </button>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="ship-controls">
+                <p>No ship selected</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">Select a ship to place or click on a placed ship to move it</p>
+            </div>
+        }
+
+        <!-- Random Deployment Button -->
+        <div class="random-deployment">
+            <button class="btn btn-secondary random-btn" @onclick="RandomDeployment" @onclick:stopPropagation="true">
+                🎲 Random Deployment
+            </button>
+            <p style="font-size: 0.8rem; opacity: 0.7; color: white; margin-top: 10px;">
+                Automatically place all ships randomly
+            </p>
+        </div>
     </div>
         </div>
     </div>
@@ -144,19 +170,145 @@
         justify-content: center;
         gap: 30px;
         padding: 20px;
-        max-width: 1200px;
+        max-width: 1400px;
         width: 100%;
         margin: 0 auto;
         min-height: 500px;
     }
 
+    /* Mobile Responsive Design */
+    @@media (max-width: 768px) {
+        .ship-placement-container {
+            flex-direction: column;
+            gap: 20px;
+            padding: 10px;
+            min-height: auto;
+        }
+
+        .deployment-content {
+            padding: 1rem;
+            padding-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .ship-placement-controls, .selected-ship-section {
+            max-width: 100%;
+            min-width: auto;
+            width: 100%;
+            min-height: auto;
+        }
+
+        .board-section {
+            order: -1; /* Move board to top on mobile */
+        }
+
+        table {
+            width: 320px;
+            height: 320px;
+            margin: 10px auto;
+        }
+
+        td {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+            /* Improve touch targets */
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .ship-btn {
+            padding: 12px 15px;
+            font-size: 14px;
+            /* Ensure touch-friendly buttons */
+            min-height: 44px;
+        }
+
+        .ship-controls {
+            margin: 15px 0;
+            padding: 15px;
+        }
+
+        .ship-controls button {
+            min-height: 44px;
+            padding: 12px 20px;
+        }
+
+        .random-deployment {
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        .random-btn {
+            min-height: 44px;
+        }
+
+        .launch-btn {
+            padding: 15px 25px;
+            font-size: 16px;
+            min-height: 50px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .deployment-content {
+            padding: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        table {
+            width: 280px;
+            height: 280px;
+        }
+
+        td {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+        }
+
+        .ship-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .ship-controls p {
+            font-size: 1rem;
+        }
+
+        .random-btn {
+            font-size: 14px;
+            padding: 10px 15px;
+        }
+    }
+
     .ship-placement-controls {
         text-align: center;
-        max-width: 400px;
-        min-width: 350px;
+        max-width: 350px;
+        min-width: 300px;
         width: 100%;
         flex-shrink: 0;
         min-height: 400px;
+    }
+
+    .selected-ship-section {
+        text-align: center;
+        max-width: 350px;
+        min-width: 300px;
+        width: 100%;
+        flex-shrink: 0;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 
     .ship-selector {
@@ -256,6 +408,7 @@
         cursor: pointer;
         box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         transition: all 0.3s ease;
+        user-select: none;
     }
 
     .launch-btn:hover {
@@ -388,6 +541,35 @@
         transform: translateY(-3px);
         box-shadow: 0 12px 40px rgba(255, 107, 107, 0.4);
     }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+        box-shadow: 0 8px 30px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #5a6268, #343a40);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(108, 117, 125, 0.4);
+    }
+
+    .random-deployment {
+        margin-top: 30px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .random-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 600;
+    }
 </style>
 
 @code {
@@ -397,6 +579,25 @@
 
     void SelectShip(Ship ship)
     {
+        // If the ship is already selected
+        if (shipManager.SelectedShip == ship)
+        {
+            // If it's placed, keep it selected (so user can click on grid to remove it)
+            if (ship.IsPlaced)
+            {
+                // Do nothing, keep it selected
+                return;
+            }
+            // If it's not placed, rotate it
+            else
+            {
+                shipManager.RotateShip(ship);
+                ClearPreview();
+                StateHasChanged();
+                return;
+            }
+        }
+
         shipManager.SelectedShip = ship;
         ClearPreview();
         StateHasChanged();
@@ -404,6 +605,19 @@
 
     void OnPlayerCellClick(int row, int col)
     {
+        // Check if there's already a ship at this position
+        var existingShip = shipManager.GetShipAtPosition(row, col);
+        if (existingShip != null)
+        {
+            // Always remove the ship from the grid when clicked
+            shipManager.RemoveShipFromGrid(existingShip);
+            // Select the removed ship for re-placement
+            shipManager.SelectedShip = existingShip;
+            ClearPreview();
+            StateHasChanged();
+            return;
+        }
+
         if (shipManager.SelectedShip == null) return;
 
         // Try to place the selected ship
@@ -507,8 +721,9 @@
     {
         if (AllShipsPlaced())
         {
-            // Store the ship configuration in a way that can be passed to the battle page
-            // For now, we'll navigate to the battle page
+            // Store the ship configuration in the game state service
+            GameState.SetPlayerShips(shipManager);
+            // Navigate to the battle page
             Navigation.NavigateTo("/battleship");
         }
     }
@@ -534,5 +749,63 @@
             return ship.Type[0].ToString(); // First letter of ship type
         }
         return "";
+    }
+
+    void DeselectShip()
+    {
+        shipManager.SelectedShip = null;
+        ClearPreview();
+        StateHasChanged();
+    }
+
+    void NavigateToHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    void RandomDeployment()
+    {
+        // Clear all currently placed ships
+        foreach (var ship in shipManager.Ships)
+        {
+            if (ship.IsPlaced)
+            {
+                shipManager.RemoveShipFromGrid(ship);
+            }
+        }
+
+        // Randomly place all ships
+        var random = Random.Shared;
+        var shipsToPlace = shipManager.Ships.ToList();
+
+        foreach (var ship in shipsToPlace)
+        {
+            bool placed = false;
+            int attempts = 0;
+            const int maxAttempts = 100; // Prevent infinite loops
+
+            while (!placed && attempts < maxAttempts)
+            {
+                // Random position
+                int row = random.Next(0, 10);
+                int col = random.Next(0, 10);
+                
+                // Random orientation
+                ship.Orientation = random.Next(2) == 0 ? ShipOrientation.Horizontal : ShipOrientation.Vertical;
+
+                // Try to place the ship
+                if (shipManager.CanPlaceShip(ship, row, col, ship.Orientation))
+                {
+                    placed = shipManager.PlaceShip(ship, row, col, ship.Orientation);
+                }
+
+                attempts++;
+            }
+        }
+
+        // Clear selection after random deployment
+        shipManager.SelectedShip = null;
+        ClearPreview();
+        StateHasChanged();
     }
 }
