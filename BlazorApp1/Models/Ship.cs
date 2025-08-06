@@ -64,8 +64,8 @@ namespace BlazorApp1.Models
             Ships = new List<Ship>
             {
                 new Ship("Carrier", 5),
-                new Ship("Destroyer", 4),
-                new Ship("Corvette", 3),
+                new Ship("Battleship", 4),
+                new Ship("Cruiser", 3),
                 new Ship("Submarine", 2)
             };
         }
