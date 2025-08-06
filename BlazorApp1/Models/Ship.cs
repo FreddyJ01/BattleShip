@@ -55,7 +55,7 @@ namespace BlazorApp1.Models
     public class ShipManager
     {
         public List<Ship> Ships { get; set; }
-        public Ship SelectedShip { get; set; }
+        public Ship? SelectedShip { get; set; }
         public int[,] Grid { get; set; }
 
         public ShipManager()
@@ -66,7 +66,8 @@ namespace BlazorApp1.Models
                 new Ship("Carrier", 5),
                 new Ship("Battleship", 4),
                 new Ship("Cruiser", 3),
-                new Ship("Submarine", 2)
+                new Ship("Submarine", 3),
+                new Ship("Destroyer", 2)
             };
         }
 
@@ -133,16 +134,23 @@ namespace BlazorApp1.Models
 
         public void RotateShip(Ship ship)
         {
-            if (!ship.IsPlaced) return;
-
             var newOrientation = ship.Orientation == ShipOrientation.Horizontal 
                 ? ShipOrientation.Vertical 
                 : ShipOrientation.Horizontal;
 
-            if (CanPlaceShip(ship, ship.Row, ship.Col, newOrientation))
+            if (ship.IsPlaced)
             {
-                RemoveShipFromGrid(ship);
-                PlaceShip(ship, ship.Row, ship.Col, newOrientation);
+                // For placed ships, check if rotation is valid at current position
+                if (CanPlaceShip(ship, ship.Row, ship.Col, newOrientation))
+                {
+                    RemoveShipFromGrid(ship);
+                    PlaceShip(ship, ship.Row, ship.Col, newOrientation);
+                }
+            }
+            else
+            {
+                // For unplaced ships, just change the orientation
+                ship.Orientation = newOrientation;
             }
         }
     }
