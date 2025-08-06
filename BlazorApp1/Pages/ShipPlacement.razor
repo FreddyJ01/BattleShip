@@ -1,16 +1,21 @@
 @page "/ship-placement"
-@using BlazorApp1.Models
 @inject NavigationManager Navigation
 
-<h3>Deploy Your Fleet</h3>
+<div class="deployment-container">
+    <!-- Animated background particles -->
+    <div class="particles-bg">
+        @for (int i = 0; i < 30; i++)
+        {
+            <div class="particle" style="--delay: @(i * 0.15)s; --duration: @(Random.Shared.Next(4, 9))s;"></div>
+        }
+    </div>
 
-<div class="instructions">
-    <p>📋 <strong>Instructions:</strong> Select a ship, then click on the grid to place it. Use the rotate button to change orientation. All ships must be placed before battle!</p>
-</div>
+    <div class="deployment-content">
+        <h3>Deploy Your Fleet</h3>
 
-<div class="ship-placement-container">
-    <!-- Ship Placement Controls -->
-    <div class="ship-placement-controls">
+        <div class="ship-placement-container">
+            <!-- Ship Placement Controls -->
+            <div class="ship-placement-controls">
         <h4>Place Your Ships</h4>
         <div class="ship-selector">
             @foreach (var ship in shipManager.Ships)
@@ -53,7 +58,6 @@
 
     <!-- Player's Board for Ship Placement -->
     <div class="board-section">
-        <h3>Your Fleet Deployment</h3>
         <table>
             @for (int row = 0; row < 10; row++)
             {
@@ -73,9 +77,55 @@
             }
         </table>
     </div>
+        </div>
+    </div>
 </div>
 
 <style>
+    /* Deployment Page Background */
+    .deployment-container {
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f3460 0%, #16537e 25%, #2e8b9e 50%, #3ea8a8 75%, #4fc3aa 100%);
+        font-family: 'Exo 2', sans-serif;
+    }
+
+    /* Animated Background Particles */
+    .particles-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        animation: float var(--duration) infinite ease-in-out;
+        animation-delay: var(--delay);
+        left: calc(var(--delay) * 25);
+        top: calc(var(--delay) * 20);
+    }
+
+    .deployment-content {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 4rem;
+    }
+
     .instructions {
         background-color: #e8f4fd;
         border: 1px solid #b8daff;
@@ -89,48 +139,60 @@
 
     .ship-placement-container {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
         gap: 30px;
         padding: 20px;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        min-height: 500px;
     }
 
     .ship-placement-controls {
         text-align: center;
-        max-width: 800px;
+        max-width: 400px;
+        min-width: 350px;
         width: 100%;
+        flex-shrink: 0;
+        min-height: 400px;
     }
 
     .ship-selector {
         display: flex;
+        flex-direction: column;
         gap: 10px;
         justify-content: center;
         margin: 20px 0;
-        flex-wrap: wrap;
     }
 
     .ship-btn {
         padding: 12px 18px;
-        border: 2px solid #007bff;
-        background-color: white;
-        color: #007bff;
+        border: 2px solid rgba(255, 107, 107, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 600;
         position: relative;
+        backdrop-filter: blur(10px);
     }
 
     .ship-btn.selected {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
         color: white;
-        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        border-color: transparent;
     }
 
     .ship-btn:hover {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
         color: white;
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        border-color: transparent;
     }
 
     .placed {
@@ -141,25 +203,42 @@
 
     .ship-controls {
         margin: 20px 0;
-        padding: 15px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        border: 1px solid #dee2e6;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .ship-controls p {
+        margin: 0 0 15px 0;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .ship-controls button {
-        margin: 0 8px;
+        margin: 5px 8px;
         padding: 10px 20px;
-        border: 1px solid #ccc;
-        background-color: #ffffff;
-        border-radius: 6px;
+        border: 2px solid rgba(255, 107, 107, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 8px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        font-weight: 600;
+        display: inline-block;
     }
 
     .ship-controls button:hover {
-        background-color: #e2e6ea;
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
     }
 
     .launch-controls {
@@ -197,6 +276,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-shrink: 0;
     }
 
     table {
@@ -205,6 +285,9 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         overflow: hidden;
+        width: 400px;
+        height: 400px;
+        border: 2px solid #333;
     }
 
     td {
@@ -218,6 +301,25 @@
         font-size: 16px;
         user-select: none;
         transition: all 0.2s ease;
+        border-right: 1px solid #333;
+        border-bottom: 1px solid #333;
+    }
+
+    /* Remove borders on outer edges to work with table border */
+    td:first-child {
+        border-left: none;
+    }
+
+    td:last-child {
+        border-right: none;
+    }
+
+    tr:first-child td {
+        border-top: none;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
     }
 
     .empty {
@@ -248,17 +350,20 @@
     }
 
     h3 {
-        color: #2c3e50;
+        color: #ffffff;
         text-align: center;
         margin-bottom: 30px;
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Orbitron', sans-serif;
     }
 
     h4 {
-        color: #34495e;
+        color: #ffffff;
         margin-bottom: 15px;
         font-size: 1.3rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .btn {
@@ -273,13 +378,15 @@
     }
 
     .btn-primary {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
         color: white;
+        box-shadow: 0 8px 30px rgba(255, 107, 107, 0.3);
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(255, 107, 107, 0.4);
     }
 </style>
 

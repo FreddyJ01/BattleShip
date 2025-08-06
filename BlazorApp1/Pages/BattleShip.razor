@@ -1,15 +1,19 @@
 @page "/battleship"
-@using BlazorApp1.Models
 
-<h3>Battle Phase</h3>
+<div class="battle-container">
+    <!-- Animated background particles -->
+    <div class="particles-bg">
+        @for (int i = 0; i < 30; i++)
+        {
+            <div class="particle" style="--delay: @(i * 0.15)s; --duration: @(Random.Shared.Next(4, 9))s;"></div>
+        }
+    </div>
 
-<div class="battle-status">
-    <p class="status-text">🎯 Select enemy grid positions to attack!</p>
-</div>
+    <div class="battle-content">
+        <h3>Battle Phase</h3>
 
-<div class="boards-container">
+        <div class="boards-container">
     <div class="board-section">
-        <h3>Your Fleet</h3>
         <table>
             @for (int row = 0; row < 10; row++)
             {
@@ -25,10 +29,12 @@
                 </tr>
             }
         </table>
+        <div class="board-label @(isPlayerTurn ? "" : "active-turn")">
+            <h3>Your Fleet</h3>
+        </div>
     </div>
     
     <div class="board-section">
-        <h3>Enemy Waters</h3>
         <table>
             @for (int row = 0; row < 10; row++)
             {
@@ -45,6 +51,9 @@
                 </tr>
             }
         </table>
+        <div class="board-label @(isPlayerTurn ? "active-turn" : "")">
+            <h3>Enemy Waters</h3>
+        </div>
     </div>
 </div>
 
@@ -56,21 +65,82 @@
     </div>
 }
 
+    </div>
+</div>
+
 <style>
+    /* Battle Page Background */
+    .battle-container {
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f3460 0%, #16537e 25%, #2e8b9e 50%, #3ea8a8 75%, #4fc3aa 100%);
+        font-family: 'Exo 2', sans-serif;
+    }
+
+    /* Animated Background Particles */
+    .particles-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        animation: float var(--duration) infinite ease-in-out;
+        animation-delay: var(--delay);
+        left: calc(var(--delay) * 25);
+        top: calc(var(--delay) * 20);
+    }
+
+    .battle-content {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 2rem;
+    }
+
+    h3 {
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Orbitron', sans-serif;
+    }
+
     .battle-status {
         text-align: center;
         margin: 20px 0;
-        padding: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
         color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 600px;
     }
 
     .status-text {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 600;
         margin: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .boards-container {
@@ -88,10 +158,43 @@
     }
 
     .board-section h3 {
-        color: #2c3e50;
-        margin-bottom: 15px;
+        color: #ffffff;
+        margin-top: 15px;
+        margin-bottom: 0;
         font-size: 1.5rem;
         font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .board-label {
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        transition: all 0.3s ease;
+    }
+
+    .board-label.active-turn {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        box-shadow: 0 8px 32px rgba(255, 107, 107, 0.4);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .board-label h3 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Orbitron', sans-serif;
     }
 
     table {
@@ -100,6 +203,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         border-radius: 8px;
         overflow: hidden;
+        border: 2px solid #333;
     }
 
     td {
@@ -113,6 +217,25 @@
         font-size: 18px;
         user-select: none;
         transition: all 0.2s ease;
+        border-right: 1px solid #333;
+        border-bottom: 1px solid #333;
+    }
+
+    /* Remove borders on outer edges to work with table border */
+    td:first-child {
+        border-left: none;
+    }
+
+    td:last-child {
+        border-right: none;
+    }
+
+    tr:first-child td {
+        border-top: none;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
     }
 
     .empty {
@@ -157,21 +280,28 @@
     .victory-message {
         text-align: center;
         margin-top: 30px;
-        padding: 20px;
-        background: linear-gradient(135deg, #28a745, #20c997);
+        padding: 25px;
+        background: rgba(40, 167, 69, 0.2);
+        backdrop-filter: blur(10px);
         color: white;
-        border-radius: 15px;
-        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(40, 167, 69, 0.3);
+        border: 2px solid rgba(40, 167, 69, 0.4);
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .victory-message h2 {
         margin: 0 0 15px 0;
         font-size: 2rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Orbitron', sans-serif;
     }
 
     .btn {
         padding: 12px 24px;
-        border: none;
+        border: 2px solid #000;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
@@ -181,13 +311,17 @@
     }
 
     .btn-primary {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
         color: white;
+        border: 2px solid #000;
+        box-shadow: 0 8px 30px rgba(255, 107, 107, 0.3);
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(255, 107, 107, 0.4);
+        border: 2px solid #000;
     }
 </style>
 
@@ -197,6 +331,7 @@
     ShipManager shipManager = new ShipManager();
     private int totalOpponentShips = 0;
     private int hitOpponentShips = 0;
+    private bool isPlayerTurn = true; // Player starts first
 
     protected override void OnInitialized()
     {
@@ -209,8 +344,8 @@
     {
         // Auto-place player ships for demonstration
         shipManager.PlaceShip(shipManager.Ships[0], 0, 0, ShipOrientation.Horizontal); // Carrier
-        shipManager.PlaceShip(shipManager.Ships[1], 2, 1, ShipOrientation.Vertical);   // Destroyer
-        shipManager.PlaceShip(shipManager.Ships[2], 5, 5, ShipOrientation.Horizontal); // Corvette
+        shipManager.PlaceShip(shipManager.Ships[1], 2, 1, ShipOrientation.Vertical);   // Battleship
+        shipManager.PlaceShip(shipManager.Ships[2], 5, 5, ShipOrientation.Horizontal); // Cruiser
         shipManager.PlaceShip(shipManager.Ships[3], 8, 8, ShipOrientation.Vertical);   // Submarine
     }
 
@@ -226,14 +361,14 @@
             shipPositions.Add((2, col));
         }
         
-        // Destroyer (3 cells)
+        // Battleship (3 cells)
         for (int row = 1; row <= 3; row++)
         {
             opponentGrid[row, 7] = 1;
             shipPositions.Add((row, 7));
         }
         
-        // Corvette (3 cells)
+        // Cruiser (3 cells)
         for (int col = 1; col <= 3; col++)
         {
             opponentGrid[5, col] = 1;
@@ -255,6 +390,7 @@
 
     void OnOpponentCellClick(int row, int col)
     {
+        if (!isPlayerTurn) return; // Not player's turn
         if (row < 0 || row >= 10 || col < 0 || col >= 10)
             return;
         if (opponentGrid[row, col] == 2 || opponentGrid[row, col] == 3)
@@ -270,7 +406,47 @@
             opponentGrid[row, col] = 3; // miss
         }
 
+        // Switch to opponent's turn after any move (hit or miss)
+        isPlayerTurn = false;
+        
+        // Simulate opponent's turn after a short delay
+        _ = Task.Delay(1000).ContinueWith(t => {
+            InvokeAsync(() => {
+                SimulateOpponentTurn();
+                isPlayerTurn = true; // Back to player's turn
+                StateHasChanged();
+            });
+        });
+
         StateHasChanged();
+    }
+
+    void SimulateOpponentTurn()
+    {
+        // Simple AI: randomly attack player's ships
+        Random random = new Random();
+        int attempts = 0;
+        
+        while (attempts < 100) // Prevent infinite loop
+        {
+            int row = random.Next(0, 10);
+            int col = random.Next(0, 10);
+            
+            // Check if this cell hasn't been attacked yet
+            if (shipManager.Grid[row, col] != 2 && shipManager.Grid[row, col] != 3)
+            {
+                if (shipManager.Grid[row, col] == 1)
+                {
+                    shipManager.Grid[row, col] = 2; // hit
+                }
+                else
+                {
+                    shipManager.Grid[row, col] = 3; // miss
+                }
+                break;
+            }
+            attempts++;
+        }
     }
 
     bool CheckVictory()
@@ -285,6 +461,7 @@
         shipManager = new ShipManager();
         hitOpponentShips = 0;
         totalOpponentShips = 0;
+        isPlayerTurn = true; // Reset to player's turn
         
         // Reinitialize the game
         OnInitialized();
