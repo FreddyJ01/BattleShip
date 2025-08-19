@@ -96,12 +96,14 @@ Razor code handles the sparkly effects and game logic!
 
 ```
 BattleShip/
-├── src/          # Game logic and C# source code
-├── assets/       # Images, sounds, resources
-├── docs/         # Documentation
-├── tests/        # Unit/integration tests
-├── README.md
-└── LICENSE
+├── BlazorApp1/       # Main source code (game logic, UI, etc.)
+├── assets/           # Gameplay Images
+├── .vscode/          # VS Code workspace settings
+├── BlazorApp1.sln    # Visual Studio solution file
+├── global.json       # .NET configuration
+├── .gitignore        # Git ignore rules
+├── LICENSE           # Project license (AGPL-3.0)
+├── README.md         # Project documentation
 ```
 
 ---
@@ -129,7 +131,7 @@ Developed by:
 
 ## 📄 License
 
-MIT – Use, share, and remix! (See [LICENSE](LICENSE))
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) – see the [LICENSE](LICENSE) file for details.
 
 ---
 
